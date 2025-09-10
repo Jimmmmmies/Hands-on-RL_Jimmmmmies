@@ -46,7 +46,7 @@ class DQN:
         self.device = device
         self.qnet = QNetwork(state_dim, hidden_dim, self.action_dim).to(self.device)
         self.target_qnet = QNetwork(state_dim, hidden_dim, self.action_dim).to(self.device)
-        self.optimizer = torch.optim.AdamW(self.qnet.parameters(), lr=lr)
+        self.optimizer = torch.optim.AdamW(self.qnet.parameters(), lr=lr) # Only update qnet
         self.lr = lr
         self.gamma = gamma
         self.epsilon = epsilon
@@ -68,6 +68,9 @@ class DQN:
         next_state = torch.tensor(transition_dict['next_state'], dtype=torch.float).to(self.device)
         done = torch.tensor(transition_dict['done'], dtype=torch.float).view(-1, 1).to(self.device)
         
+        # Double DQN, deal with overestimation
+        # max_action = self.qnet(next_state).max(1)[1].view(-1, 1)
+        # max_q = self.target_qnet(next_state).gather(1, max_action)
         q = self.qnet(state).gather(1, action)
         max_q = self.target_qnet(next_state).max(1)[0].view(-1, 1)
         target_q = reward + self.gamma * max_q * (1 - done)
@@ -76,7 +79,7 @@ class DQN:
         dqn_loss.backward()
         self.optimizer.step()
         
-        if self.count % self.target_update == 0:
+        if self.count % self.target_update == 0: # Update target network by copying weights from qnet
             self.target_qnet.load_state_dict(self.qnet.state_dict())
         self.count += 1
         
