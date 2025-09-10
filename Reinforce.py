@@ -54,8 +54,8 @@ class REINFORCE:
             loss.backward()
         self.optimizer.step()
         
-lr = 1e-3
-n_episode = 1000
+lr = 2e-3
+n_episode = 2000
 hidden_dim = 128
 gamma = 0.98
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
