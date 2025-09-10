@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from config.CliffWalkingEnv import CliffWalkingEnv, print_agent
+from configs import CliffWalkingEnv, print_agent
 from tqdm import tqdm
 
 class Sarsa:
