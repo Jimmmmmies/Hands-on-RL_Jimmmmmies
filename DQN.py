@@ -74,7 +74,7 @@ class DQN:
         q = self.qnet(state).gather(1, action)
         max_q = self.target_qnet(next_state).max(1)[0].view(-1, 1)
         target_q = reward + self.gamma * max_q * (1 - done)
-        dqn_loss = torch.mean(F.mse_loss(q, target_q))
+        dqn_loss = torch.mean(F.mse_loss(q, target_q)) # Use mean because batch update
         self.optimizer.zero_grad(set_to_none=True)
         dqn_loss.backward()
         self.optimizer.step()

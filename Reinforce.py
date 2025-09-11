@@ -44,6 +44,7 @@ class REINFORCE:
         
         G = 0
         self.optimizer.zero_grad(set_to_none=True)
+        # Use Monte Carlo method to calculate the return G
         for i in reversed(range(len(reward_list))):
             reward = reward_list[i]
             state = torch.tensor([state_list[i]], dtype=torch.float).to(self.device)
