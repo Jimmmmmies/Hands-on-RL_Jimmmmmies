@@ -1,1 +1,1 @@
-This is my code implementation of RL learning, from Hands-on-RL and CS285.
+This is my code implementation of learning typical RL algorithms, from Hands-on-RL and CS285.
